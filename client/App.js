@@ -9,7 +9,8 @@ import {
   Title,
   Content,
   Row,
-  Col
+  Col,
+  CheckBox
  } from "native-base";
 import {
   TextInput,
@@ -24,7 +25,7 @@ import axios from 'axios';
 export default class App extends Component {
 
   constructor() {
-    super(); 
+    super();
     this.state = {
       text: '',
       listan: [],
@@ -39,24 +40,26 @@ export default class App extends Component {
   }
 
   loadToDoList() {
-    this.setState({refreshStatus: true})
+    this.setState({
+      refreshStatus: true
+    })
     console.log('cek todolist');
     axios.get('http://192.168.0.19:3001/api/todo')
-    .then((res) => {
-      console.log('data get')
-      console.log(res)
-      this.setState({
-        listan: res.data.data,
-        refreshStatus: false
+      .then((res) => {
+        console.log('data get')
+        console.log(res)
+        this.setState({
+          listan: res.data.data,
+          refreshStatus: false
+        })
       })
-    })
-    .catch((err) => {
-      console.log(err)
-    })
+      .catch((err) => {
+        console.log(err)
+      })
   }
 
   handleClick = () => {
-    if(this.state.submitButton === 'Submit') {
+    if (this.state.submitButton === 'Submit') {
       this.postUpdate();
     } else if (this.state.submitButton === 'Update') {
       this.editItem(this.state.id);
@@ -65,39 +68,39 @@ export default class App extends Component {
 
   postUpdate = () => {
     axios.post('http://192.168.0.19:3001/api/todo', {
-      text: this.state.text
-    })
-    .then((res) => {
-      console.log(res);
-      console.log(this.state.text + ' berhasil dimasukkan');
-      this.setState({
-        text: ''
+        text: this.state.text
+      })
+      .then((res) => {
+        console.log(res);
+        console.log(this.state.text + ' berhasil dimasukkan');
+        this.setState({
+          text: ''
+        });
+        this.loadToDoList();
+      })
+      .catch((err) => {
+        console.log(err);
       });
-      this.loadToDoList();
-    })
-    .catch((err) => {
-      console.log(err);
-    });
   }
 
   editItem = (item) => {
     console.log(item);
     axios.put('http://192.168.0.19:3001/api/todo/' + item, {
-      text: this.state.text
-    })
-    .then((res) => {
-      console.log(res); 
-      console.log('updated');
-      this.loadToDoList();
-      this.setState({
-        text: '',
-        id: '',
-        submitButton: 'Submit'
+        text: this.state.text
+      })
+      .then((res) => {
+        console.log(res);
+        console.log('updated');
+        this.loadToDoList();
+        this.setState({
+          text: '',
+          id: '',
+          submitButton: 'Submit'
+        });
+      })
+      .catch((err) => {
+        console.log(err);
       });
-    })
-    .catch((err) => {
-      console.log(err);
-    }) ;
   }
 
   onEditItemClicked = (item) => {
@@ -111,14 +114,14 @@ export default class App extends Component {
 
   deleteItem = (item) => {
     axios.delete('http://192.168.0.19:3001/api/todo/' + item._id)
-    .then((res) => {
-      console.log(res); 
-      console.log('todo deleted');
-      this.loadToDoList();
-    })
-    .catch((err) => {
-      console.log(err);
-    }) ;
+      .then((res) => {
+        console.log(res);
+        console.log('todo deleted');
+        this.loadToDoList();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   render() {
@@ -157,22 +160,29 @@ export default class App extends Component {
               inverted
               refreshing={this.state.refreshStatus}
               data={this.state.listan}
-              keyExtractor={(item, index) => item._id}
+              keyExtractor={(item) => item._id}
               renderItem={({item}) => 
                 <ListItem>
-                  <TouchableOpacity
-                    onPress={() => this.onEditItemClicked(item)}
-                    onLongPress={() => this.deleteItem(item)}
-                  >
-                    <Text>{item.text}</Text>
-                  </TouchableOpacity>
+                  <CheckBox
+                    checked={item.completed}
+                    style={{marginRight: 16}}
+                    color='black'
+                  />
+                  <Body>
+                    <TouchableOpacity
+                      onPress={() => this.onEditItemClicked(item)}
+                      onLongPress={() => this.deleteItem(item)}
+                      >
+                      <Text>{item.text}</Text>
+                    </TouchableOpacity>
+                  </Body>
                 </ListItem>
-            }
+              }
             />
           </Row>
         </Content>
 
-  </Container>
+      </Container>
     );
   }
 }
