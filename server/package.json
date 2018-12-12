@@ -1,0 +1,7 @@
+{
+  "name": "todo",
+  "version": "1.0.0",
+  "description": "todo server test",
+  "main": "index.js",
+  "license": "MIT"
+}
