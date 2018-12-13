@@ -2,10 +2,11 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const Model = require('./model');
+// const cors = require('./cors');
 
 const app = express();
 
-const API_PORT = process.env.API_PORT || 3001;
+const API_PORT = process.env.PORT || 3000;
 
 const DB_URI = 'mongodb://tazirahmb:dumdum987@ds263791.mlab.com:63791/todolist';
 
@@ -13,6 +14,7 @@ mongoose.connect(DB_URI);
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection Error :'));
 
+// app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
@@ -91,4 +93,4 @@ router.delete('/todo/:todoId', (req, res) => {
 
 app.use('/api', router);
 
-app.listen(API_PORT, () => console.log('listening on port ${API_PORT}'));
+app.listen(API_PORT, () => console.log('listening on port ' + API_PORT));

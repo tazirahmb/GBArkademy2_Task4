@@ -44,7 +44,7 @@ export default class App extends Component {
       refreshStatus: true
     })
     console.log('cek todolist');
-    axios.get('http://192.168.0.19:3001/api/todo')
+    axios.get('https://powerful-brushlands-96374.herokuapp.com/api/todo')
       .then((res) => {
         console.log('data get')
         console.log(res)
@@ -67,7 +67,7 @@ export default class App extends Component {
   }
 
   postUpdate = () => {
-    axios.post('http://192.168.0.19:3001/api/todo', {
+    axios.post('https://powerful-brushlands-96374.herokuapp.com/api/todo', {
         text: this.state.text
       })
       .then((res) => {
@@ -85,7 +85,7 @@ export default class App extends Component {
 
   editItem = (item) => {
     console.log(item);
-    axios.put('http://192.168.0.19:3001/api/todo/' + item, {
+    axios.put('https://powerful-brushlands-96374.herokuapp.com/api/todo/' + item, {
         text: this.state.text
       })
       .then((res) => {
@@ -113,7 +113,7 @@ export default class App extends Component {
   }
 
   deleteItem = (item) => {
-    axios.delete('http://192.168.0.19:3001/api/todo/' + item._id)
+    axios.delete('https://powerful-brushlands-96374.herokuapp.com/api/todo/' + item._id)
       .then((res) => {
         console.log(res);
         console.log('todo deleted');
